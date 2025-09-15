@@ -8,6 +8,7 @@ import WagmiWrapper from "../wagmi-provider";
 import { formatAddress } from "../utils";
 import TokenActions from "./token-action";
 import LiveEvents from "../components/LiveEvents";
+import EIP712Signer from "../components/EIP712Signer";
 
 const Page = async ({
   params,
@@ -126,6 +127,7 @@ const Page = async ({
         <WagmiWrapper>
           <TokenActions />
           <LiveEvents tokenAddress={tokenAddress} />
+          <EIP712Signer tokenAddress={tokenAddress} />
         </WagmiWrapper>
 
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
