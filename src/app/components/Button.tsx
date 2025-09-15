@@ -5,6 +5,7 @@ interface IProps {
   title: string;
   onClick: () => void;
   variant?: "small" | "medium" | "large";
+  intent?: "primary" | "danger" | "warning" | "success"; // Added intent prop
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   className?: string;
@@ -17,6 +18,7 @@ const Button = ({
   title,
   onClick,
   variant = "medium",
+  intent = "primary", // Default intent to primary
   leftIcon,
   rightIcon,
   className,
@@ -24,11 +26,29 @@ const Button = ({
   loading = false,
   type = "button",
 }: IProps) => {
-  const baseStyles =
-    "bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50";
   const disabledStyles = "disabled:opacity-50 disabled:cursor-not-allowed";
   const flexStyles = "flex items-center justify-center";
   const gapStyles = leftIcon || rightIcon || loading ? "gap-2" : "";
+
+  let baseStyles =
+    "cursor-pointer text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-opacity-50";
+
+  // Apply styles based on intent
+  switch (intent) {
+    case "danger":
+      baseStyles += " bg-red-600 hover:bg-red-700 focus:ring-red-500";
+      break;
+    case "warning":
+      baseStyles += " bg-yellow-500 hover:bg-yellow-600 focus:ring-yellow-400";
+      break;
+    case "success":
+      baseStyles += " bg-green-600 hover:bg-green-700 focus:ring-green-500";
+      break;
+    case "primary":
+    default:
+      baseStyles += " bg-blue-600 hover:bg-blue-700 focus:ring-blue-500";
+      break;
+  }
 
   let variantStyles = "";
   switch (variant) {
