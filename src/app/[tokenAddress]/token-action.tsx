@@ -73,7 +73,7 @@ const TokenActions = () => {
   const isLoading = isPending || isConfirming;
 
   return (
-    <div className="border-t border-gray-200 pt-6">
+    <div className="border-t border-gray-200 pt-6 pb-4">
       <h2 className="text-lg font-semibold text-gray-900 mb-6">
         Token Actions
       </h2>
