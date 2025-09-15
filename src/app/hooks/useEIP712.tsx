@@ -78,7 +78,9 @@ export const useEIP712 = () => {
 
   const signMessage = async (typedData: EIP712TypedData) => {
     try {
-      signTypedData(typedData);
+      signTypedData(
+        typedData as unknown as Parameters<typeof signTypedData>[0]
+      );
     } catch (err) {
       console.error("Signing failed:", err);
       throw err;
@@ -89,10 +91,18 @@ export const useEIP712 = () => {
     setIsVerifying(true);
     try {
       const recovered = await recoverTypedDataAddress({
-        domain: typedData.domain,
-        types: typedData.types,
-        primaryType: typedData.primaryType,
-        message: typedData.message,
+        domain: typedData.domain as unknown as Parameters<
+          typeof recoverTypedDataAddress
+        >[0]["domain"],
+        types: typedData.types as unknown as Parameters<
+          typeof recoverTypedDataAddress
+        >[0]["types"],
+        primaryType: typedData.primaryType as unknown as Parameters<
+          typeof recoverTypedDataAddress
+        >[0]["primaryType"],
+        message: typedData.message as unknown as Parameters<
+          typeof recoverTypedDataAddress
+        >[0]["message"],
         signature: sig as `0x${string}`,
       });
       setRecoveredAddress(recovered);

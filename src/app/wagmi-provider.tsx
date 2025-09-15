@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { config } from "@/app/lib/config";
+import { TransactionProvider } from "@/app/contexts/TransactionContext";
 import React from "react";
 
 interface IProps {
@@ -13,7 +14,7 @@ const WagmiWrapper = ({ children }: IProps) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={new QueryClient()}>
-        {children}
+        <TransactionProvider>{children}</TransactionProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

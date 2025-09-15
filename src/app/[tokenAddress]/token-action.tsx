@@ -3,7 +3,12 @@
 import React, { useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { useERC20, useERC20Actions } from "../hooks/useERC20";
+import {
+  useERC20,
+  useMintTransaction,
+  useTransferTransaction,
+  useApproveTransaction,
+} from "../hooks/useERC20";
 import { useParams } from "next/navigation";
 import { useAccount } from "wagmi";
 import { Coins, UserCheck, ArrowRightLeft } from "lucide-react";
@@ -15,11 +20,32 @@ const TokenActions = () => {
   const { tokenInfo, refetchBalance, refetchAllowance } = useERC20(
     params.tokenAddress as `0x${string}`
   );
-  const { mint, transfer, approve, isPending, isConfirming, isSuccess, error } =
-    useERC20Actions(
-      params.tokenAddress as `0x${string}`,
-      address as `0x${string}`
-    );
+  const {
+    mint,
+    isPending: mintPending,
+    isConfirming: mintConfirming,
+    isSuccess: mintSuccess,
+    error: mintError,
+  } = useMintTransaction(
+    params.tokenAddress as `0x${string}`,
+    address as `0x${string}`
+  );
+
+  const {
+    transfer,
+    isPending: transferPending,
+    isConfirming: transferConfirming,
+    isSuccess: transferSuccess,
+    error: transferError,
+  } = useTransferTransaction(params.tokenAddress as `0x${string}`);
+
+  const {
+    approve,
+    isPending: approvePending,
+    isConfirming: approveConfirming,
+    isSuccess: approveSuccess,
+    error: approveError,
+  } = useApproveTransaction(params.tokenAddress as `0x${string}`);
 
   const [mintAmount, setMintAmount] = useState("");
   const [transferTo, setTransferTo] = useState("");
@@ -70,7 +96,15 @@ const TokenActions = () => {
     }
   };
 
-  const isLoading = isPending || isConfirming;
+  const isLoading =
+    mintPending ||
+    mintConfirming ||
+    transferPending ||
+    transferConfirming ||
+    approvePending ||
+    approveConfirming;
+  const hasError = mintError || transferError || approveError;
+  const hasSuccess = mintSuccess || transferSuccess || approveSuccess;
 
   return (
     <div className="border-t border-gray-200 pt-6 pb-4">
@@ -91,13 +125,15 @@ const TokenActions = () => {
         </div>
       </div>
 
-      {error && (
+      {hasError && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-700 text-sm">Error: {error.message}</p>
+          <p className="text-red-700 text-sm">
+            Error: {(mintError || transferError || approveError)?.message}
+          </p>
         </div>
       )}
 
-      {isSuccess && (
+      {hasSuccess && (
         <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
           <p className="text-green-700 text-sm">Transaction successful!</p>
         </div>
@@ -120,8 +156,8 @@ const TokenActions = () => {
           <Button
             title="Mint Tokens"
             onClick={handleMint}
-            disabled={!mintAmount || !address || isLoading}
-            loading={isLoading}
+            disabled={!mintAmount || !address || mintPending || mintConfirming}
+            loading={mintPending || mintConfirming}
             leftIcon={<Coins className="w-4 h-4" />}
             className="w-full"
           />
@@ -152,8 +188,14 @@ const TokenActions = () => {
             title="Transfer Tokens"
             onClick={handleTransfer}
             intent="success"
-            disabled={!transferTo || !transferAmount || !address || isLoading}
-            loading={isLoading}
+            disabled={
+              !transferTo ||
+              !transferAmount ||
+              !address ||
+              transferPending ||
+              transferConfirming
+            }
+            loading={transferPending || transferConfirming}
             leftIcon={<ArrowRightLeft className="w-4 h-4" />}
             className="w-full"
           />
@@ -185,9 +227,13 @@ const TokenActions = () => {
             onClick={handleApprove}
             intent="warning"
             disabled={
-              !approveSpender || !approveAmount || !address || isLoading
+              !approveSpender ||
+              !approveAmount ||
+              !address ||
+              approvePending ||
+              approveConfirming
             }
-            loading={isLoading}
+            loading={approvePending || approveConfirming}
             leftIcon={<UserCheck className="w-4 h-4" />}
             className="w-full"
           />

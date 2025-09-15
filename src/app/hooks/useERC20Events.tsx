@@ -19,7 +19,6 @@ export interface ERC20Event {
 export const useERC20Events = (tokenAddress: string) => {
   const [events, setEvents] = useState<ERC20Event[]>([]);
 
-  // Watch Transfer events
   useWatchContractEvent({
     address: tokenAddress as `0x${string}`,
     abi: ERC20Abi,
@@ -42,7 +41,6 @@ export const useERC20Events = (tokenAddress: string) => {
     },
   });
 
-  // Watch Approval events
   useWatchContractEvent({
     address: tokenAddress as `0x${string}`,
     abi: ERC20Abi,

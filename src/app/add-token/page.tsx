@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
-import { Plus, AlertCircle } from "lucide-react";
+import { Plus } from "lucide-react";
 import { isValidEthereumAddress } from "../utils";
 import Error from "../components/Error";
 

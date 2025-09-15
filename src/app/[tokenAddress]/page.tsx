@@ -9,6 +9,7 @@ import { formatAddress } from "../utils";
 import TokenActions from "./token-action";
 import LiveEvents from "../components/LiveEvents";
 import EIP712Signer from "../components/EIP712Signer";
+import TransactionQueue from "../components/TransactionQueue";
 
 const Page = async ({
   params,
@@ -126,6 +127,7 @@ const Page = async ({
 
         <WagmiWrapper>
           <TokenActions />
+          <TransactionQueue />
           <LiveEvents tokenAddress={tokenAddress} />
           <EIP712Signer tokenAddress={tokenAddress} />
         </WagmiWrapper>
